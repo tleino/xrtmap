@@ -1,0 +1,38 @@
+xrtmap - real time point plotting on a map for X11
+
+Dependencies
+============
+
+- libpng
+- X11
+
+Build & Install
+===============
+
+./configure ~
+make install
+
+Caveats
+=======
+
+By default xrtmap supports background image that is exactly 720x360.
+You should use equirectangular projection world map (a.k.a. equidistant
+cylindrical).
+
+Usage
+=====
+
+Pipe a data stream that contains latitude, longitude data to xrtmap
+and xrtmap will display them on the map for n seconds.
+
+$ cat | xrtmap
+0.0 0.0
+10.0 10.0
+20.0 20.0
+
+See also
+========
+
+https://github.com/tleino/xrtgauge
+https://github.com/tleino/xrtgraph
+https://github.com/tleino/wtlyzer
