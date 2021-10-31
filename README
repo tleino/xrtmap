@@ -30,6 +30,10 @@ $ cat | xrtmap
 10.0 10.0
 20.0 20.0
 
+Also see example.sh which you could run e.g. like this on OpenBSD:
+
+$ doas ./example.sh | xrtmap
+
 See also
 ========
 
