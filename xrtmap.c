@@ -28,7 +28,7 @@
 
 #include <png.h>
 
-#define EXPIRE_SECS 10
+#define EXPIRE_SECS 30
 
 static Display *dpy;
 static Window win;
@@ -37,7 +37,7 @@ static int win_width, win_height;
 static XImage *image;
 static GC gc;
 static int ctlfd;
-static double scale;
+static double scale_x, scale_y;
 
 struct point {
 	double lat;
@@ -211,9 +211,9 @@ draw_point(double lat, double lon)
 	int x, y;
 	int sz;
 
-	sz = 10 / scale;
-	x = (int) ((lon + 180.0) * scale);
-	y = (int) ((90.0 - lat) * scale);
+	sz = 5;
+	x = (int) ((lon + 180.0) * scale_x);
+	y = (int) ((90.0 - lat) * scale_y);
 	XFillRectangle(dpy, win, gc, x-(sz/2), y-(sz/2), sz, sz);
 }
 
@@ -223,9 +223,9 @@ undraw_point(double lat, double lon)
 	int x, y;
 	int sz;
 
-	sz = 10 / scale;
-	x = (int) ((lon + 180.0) * scale);
-	y = (int) ((90.0 - lat) * scale);
+	sz = 5;
+	x = (int) ((lon + 180.0) * scale_x);
+	y = (int) ((90.0 - lat) * scale_y);
 	XPutImage(dpy, win, gc, image, x-(sz/2), y-(sz/2), x-(sz/2), y-(sz/2),
 	    sz, sz);
 }
@@ -364,13 +364,8 @@ main(int argc, char **argv)
 
 	load_image(path);
 
-	/*
-	 * TODO: Calculate scale based on actual window/image width, height.
-	 *       Scale is required so that for example if background image
-	 *       is 360 x 180 then 1.0 scale is good, if it is 720 x 360
-	 *       then make it 2.0, etc.
-	 */
-	scale = 2.0;
+	scale_x = width/360.0;
+	scale_y = height/180.0;
 
 	draw();
 
