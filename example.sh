@@ -1,7 +1,8 @@
 #!/bin/sh
 
 IFACE=em0
-FILTER='tcp[tcpflags] & (tcp-syn) != 0'
+FILTER='tcp[tcpflags] & (tcp-syn|tcp-ack) == tcp-syn|tcp-ack'
+
 GEOIPDB=/var/db/GeoIP/GeoLite2-City.mmdb
 
 find_location() {
@@ -25,7 +26,7 @@ print_location() {
 
 get_ips() {
 	tcpdump -l -q -n -i $IFACE $FILTER \
-		| awk '{ print $4; fflush(stdout); }' \
+		| awk '{ print $2; fflush(stdout); }' \
 		| awk 'BEGIN { FS="." } \
 		{ printf("%d.%d.%d.%d\n", $1, $2, $3, $4); fflush(stdout); }'
 }
